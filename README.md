@@ -74,18 +74,18 @@ jobs:
 
 ## Inputs
 
-| Name         | Required | Default               | Description                                                                         |
-| ------------ | -------- | --------------------- | ----------------------------------------------------------------------------------- |
-| `token`      | No       | `${{ github.token }}` | Token used to read the PR and reviews. Override only for a PAT or GitHub App token. |
-| `pr-number`  | Yes      | —                     | Pull request number to check.                                                       |
+| Name        | Required | Default               | Description                                                                          |
+| ----------- | -------- | --------------------- | ------------------------------------------------------------------------------------ |
+| `token`     | No       | `${{ github.token }}` | Token used to read the PR and reviews. Override only for a PAT or GitHub App token. |
+| `pr-number` | Yes      | —                     | Pull request number to check.                                                        |
 
 ## Outputs
 
-| Name                   | Description                                                                 |
-| ---------------------- | --------------------------------------------------------------------------- |
-| `all-approved`         | `"true"` or `"false"` — whether all requested human reviewers have approved. Use `== 'true'` in `if:` conditions. |
-| `requested-reviewers`  | JSON array of all human reviewers ever requested on the PR.                 |
-| `pending-reviewers`    | JSON array of current pending human reviewers (awaiting review).            |
+| Name                  | Description                                                                                                        |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `all-approved`        | `"true"` or `"false"` — whether all requested human reviewers have approved. Use `== 'true'` in `if:` conditions. |
+| `requested-reviewers` | JSON array of all human reviewers ever requested on the PR.                                                        |
+| `pending-reviewers`   | JSON array of current pending human reviewers (awaiting review).                                                   |
 
 ## Required permissions
 
