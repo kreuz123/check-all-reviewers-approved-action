@@ -1,0 +1,27 @@
+name: "Check All Reviewers Approved"
+description: "Checks whether all requested human reviewers have approved a pull request"
+author: "kreuz123"
+branding:
+  icon: "check-circle"
+  color: "green"
+
+inputs:
+  token:
+    description: "GitHub token for API access"
+    required: false
+    default: ${{ github.token }}
+  pr-number:
+    description: "Pull request number to check"
+    required: true
+
+outputs:
+  all-approved:
+    description: "Whether all requested human reviewers have approved ('true' or 'false')"
+  requested-reviewers:
+    description: "JSON array of all human reviewers ever requested on the PR"
+  pending-reviewers:
+    description: "JSON array of current pending human reviewers (awaiting review)"
+
+runs:
+  using: "node24"
+  main: "dist/index.js"
