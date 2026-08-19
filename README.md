@@ -4,7 +4,7 @@ A GitHub Action that checks whether all requested human reviewers have approved 
 
 ## Features
 
-- ✅ Tracks all reviewers ever requested, including those removed from the current request list
+- ✅ Tracks all human reviewers and evaluates their latest review
 - ✅ Excludes bot reviewers from all approval decisions
 - ✅ Treats pending reviewers (awaiting review) as blocking
 - ✅ Handles pagination for reviews and timeline events
