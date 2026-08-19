@@ -31918,6 +31918,10 @@ function computeApprovalStatus({ pr, allReviews, timelineEvents }) {
   const humanReviews = Object.values(latestReviewsByUser).filter(
     (r) => !isBot(r.user),
   );
+  const pendingHumanReviewers = (pr.requested_reviewers || []).filter(
+    (r) => !isBot(r),
+  );
+  const pendingReviewers = pendingHumanReviewers.map((r) => r.login);
 
   // Step 1: Build set of all human reviewers ever requested
   const allEverRequestedReviewers = new Set(
@@ -31939,9 +31943,6 @@ function computeApprovalStatus({ pr, allReviews, timelineEvents }) {
     (r) => r.state === "CHANGES_REQUESTED",
   );
   if (hasChangesRequested) {
-    const pendingReviewers = (pr.requested_reviewers || [])
-      .filter((r) => !isBot(r))
-      .map((r) => r.login);
     return {
       allApproved: false,
       requestedReviewers: [...allEverRequestedReviewers],
@@ -31959,10 +31960,6 @@ function computeApprovalStatus({ pr, allReviews, timelineEvents }) {
   }
 
   // Step 4: Pending human reviewers (still awaiting review)
-  const pendingHumanReviewers = (pr.requested_reviewers || []).filter(
-    (r) => !isBot(r),
-  );
-
   // Step 5: Restrict reviews to those in the ever-requested set
   const reviewerOnlyReviews = humanReviews.filter((r) =>
     allEverRequestedReviewers.has(r.user.login),
@@ -31977,7 +31974,7 @@ function computeApprovalStatus({ pr, allReviews, timelineEvents }) {
   return {
     allApproved,
     requestedReviewers: [...allEverRequestedReviewers],
-    pendingReviewers: pendingHumanReviewers.map((r) => r.login),
+    pendingReviewers,
   };
 }
 

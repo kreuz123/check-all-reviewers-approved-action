@@ -70,6 +70,30 @@ describe("computeApprovalStatus", () => {
     expect(result.allApproved).toBe(false);
   });
 
+  test("latest human review is DISMISSED => false", () => {
+    const result = computeApprovalStatus({
+      pr: makePR([]),
+      allReviews: [
+        makeReview("alice", "APPROVED"),
+        makeReview("alice", "DISMISSED"),
+      ],
+      timelineEvents: [makeTimelineReviewRequested("alice")],
+    });
+    expect(result.allApproved).toBe(false);
+  });
+
+  test("latest human review is COMMENTED => false", () => {
+    const result = computeApprovalStatus({
+      pr: makePR([]),
+      allReviews: [
+        makeReview("alice", "APPROVED"),
+        makeReview("alice", "COMMENTED"),
+      ],
+      timelineEvents: [makeTimelineReviewRequested("alice")],
+    });
+    expect(result.allApproved).toBe(false);
+  });
+
   test("CHANGES_REQUESTED takes priority even if another reviewer approved", () => {
     const result = computeApprovalStatus({
       pr: makePR([]),
