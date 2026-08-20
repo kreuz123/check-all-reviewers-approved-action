@@ -20,6 +20,8 @@ A GitHub Action that checks whether all requested human reviewers have approved 
 7. If any currently requested human reviewer has not yet reviewed (pending), outputs `false`.
 8. Outputs `true` only when at least one reviewer has approved and every reviewer's latest review is `APPROVED`.
 
+> **Note:** Only human reviewers who have ever been requested are included in the approval check. However, a `CHANGES_REQUESTED` review from any human reviewer will block approval.
+
 ## Usage
 
 ### Basic usage
