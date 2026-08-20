@@ -134,6 +134,54 @@ describe("run", () => {
     );
   });
 
+  test("accepts whitespace around a valid pr-number", async () => {
+    core.getInput.mockImplementation((name) => {
+      if (name === "token") return "test-token";
+      if (name === "pr-number") return " 42 ";
+      return "";
+    });
+
+    await run();
+
+    expect(checkAllReviewersApproved).toHaveBeenCalledWith(
+      client,
+      "owner",
+      "repo",
+      42,
+    );
+    expect(core.setFailed).not.toHaveBeenCalled();
+  });
+
+  test.each(["", "1.5", "9007199254740992"])(
+    "fails for invalid pr-number %j",
+    async (prNumber) => {
+      core.getInput.mockImplementation((name) => {
+        if (name === "token") return "test-token";
+        if (name === "pr-number") return prNumber;
+        return "";
+      });
+
+      await run();
+
+      expect(core.setFailed).toHaveBeenCalledWith(
+        expect.stringContaining("pr-number"),
+      );
+      expect(checkAllReviewersApproved).not.toHaveBeenCalled();
+    },
+  );
+
+  test("passes token to getOctokit", async () => {
+    await run();
+
+    expect(github.getOctokit).toHaveBeenCalledWith("test-token");
+  });
+
+  test("does not fail on successful execution", async () => {
+    await run();
+
+    expect(core.setFailed).not.toHaveBeenCalled();
+  });
+
   test("calls setFailed on API error", async () => {
     checkAllReviewersApproved.mockRejectedValue(new Error("API error"));
 
