@@ -31912,7 +31912,7 @@ function collapseToLatestReviewByUser(reviews) {
  * @returns {{ allApproved: boolean, requestedReviewers: string[], pendingReviewers: string[] }}
  */
 function computeApprovalStatus({ pr, allReviews, timelineEvents }) {
-  const latestReviewsByUser = collapseToLatestReviewByUser(allReviews);
+  const latestReviewsByUser = collapseToLatestReviewByUser(allReviews || []);
 
   // All human reviewers' latest reviews
   const humanReviews = Object.values(latestReviewsByUser).filter(
