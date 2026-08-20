@@ -270,7 +270,7 @@ describe("computeApprovalStatus", () => {
   test("ignores bot reviewers in pending output", () => {
     const result = computeApprovalStatus({
       pr: makePR([makeUser("automation[bot]"), makeUser("alice")]),
-      allReviews: [makeReview("alice", "APPROVED")],
+      allReviews: [],
       timelineEvents: [
         makeTimelineReviewRequested("automation[bot]"),
         makeTimelineReviewRequested("alice"),
@@ -351,18 +351,18 @@ describe("checkAllReviewersApproved", () => {
   });
 
   test.each([
-    ["pull request", "get", new Error("PR API error")],
-    ["reviews", "reviews", new Error("reviews API error")],
-    ["timeline", "timeline", new Error("timeline API error")],
+    ["pull request", "get-pr", new Error("PR API error")],
+    ["reviews", "paginate-reviews", new Error("reviews API error")],
+    ["timeline", "paginate-timeline", new Error("timeline API error")],
   ])("%s API errors are propagated", async (_name, source, error) => {
     const client = makeClient();
-    if (source === "get") {
+    if (source === "get-pr") {
       client.rest.pulls.get.mockRejectedValue(error);
     } else {
       client.rest.pulls.get.mockResolvedValue({
         data: { requested_reviewers: [] },
       });
-      if (source === "reviews") {
+      if (source === "paginate-reviews") {
         client.paginate.mockRejectedValueOnce(error);
       } else {
         client.paginate.mockResolvedValueOnce([]);
